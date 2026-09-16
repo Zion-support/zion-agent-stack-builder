@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zion Agent Stack Builder — recommended MCP/agent tool stacks</title>
+<meta name="description" content="Pick a use case and get a recommended AI agent stack: orchestration, MCP servers, models and evals. Free tool by Zion Tech Group.">
+<style>
+:root{--bg:#0a0f1e;--card:#131a30;--acc:#7dd3fc;--txt:#e7ecf9;--mut:#93a0c2}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--txt)}
+header{padding:48px 24px 24px;text-align:center;background:linear-gradient(160deg,#123049,#0a0f1e)}
+h1{margin:0 0 8px}.wrap{max-width:920px;margin:0 auto;padding:24px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.chip{padding:10px 16px;border-radius:24px;border:1px solid #274063;background:var(--card);color:var(--txt);cursor:pointer;font-size:.95rem}
+.chip.on{background:var(--acc);color:#04121f;border-color:var(--acc);font-weight:600}
+.stack{display:none;background:var(--card);border:1px solid #22345a;border-radius:16px;padding:20px}
+.stack.on{display:block}.layer{margin:12px 0}.layer b{color:var(--acc)}
+.layer ul{margin:6px 0 0;padding-left:20px}.layer li{margin:4px 0;color:var(--txt)}
+.hint{color:var(--mut);font-size:.85rem;margin-top:10px}
+footer{padding:32px 24px;text-align:center;color:var(--mut);font-size:.85rem;border-top:1px solid #1a2440;margin-top:40px}
+footer a{color:var(--acc);text-decoration:none;margin:0 8px}
+</style>
+</head>
+<body>
+<header><h1>🧱 Zion Agent Stack Builder</h1>
+<p>Choose your use case — get a battle-tested stack: orchestration, MCP servers, models, evals and guardrails.</p></header>
+<div class="wrap">
+<div class="chips" id="chips"></div>
+<div id="out"></div>
+<p class="hint">Stacks reference open-source servers from our <a style="color:var(--acc)" href="https://ziontechgroup.com/zion-mcp-finder/">MCP Server Finder</a>. Deploy configs live in the <a style="color:var(--acc)" href="https://github.com/Zion-support/zion-mcp-stack">zion-mcp-stack</a> repo.</p>
+</div>
+<footer>Part of the <a href="https://ziontechgroup.com">Zion Tech Group</a> AI apps network ·
+<a href="https://ziontechgroup.com/zion-mcp-finder/">MCP Finder</a>
+<a href="https://ziontechgroup.com/zion-llm-cost-calculator/">LLM Cost Calculator</a>
+<a href="https://ziontechgroup.com/zion-rag-eval-kit/">RAG Eval Kit</a>
+<a href="https://ziontechgroup.com/zion-ai-release-radar/">AI Release Radar</a></footer>
+<script>
+const U={
+'Customer support copilot':{Orchestration:['LangGraph or OpenAI Agents SDK','Human-in-the-loop approval node'],MCP:['slack-mcp-server (tickets/chat)','github/github-mcp-server (known-issue lookup)','makenotion/notion-mcp-server (runbooks)'],Models:['Claude Sonnet 4.5 (primary)','GPT-5 mini (fallback/router)'],Evals:['zion-rag-eval-kit groundedness checks','Regression suite in CI'],Guardrails:['PII redaction','Refund/action approval thresholds']},
+'DevOps & incident response':{Orchestration:['Docker MCP Gateway (aggregation)','PagerDuty webhook triggers'],MCP:['grafana/mcp-grafana (metrics, alerts)','github/github-mcp-server (PRs, actions)','cloudflare/mcp-server-cloudflare (edge ops)'],Models:['GPT-5 (diagnosis)','Claude Haiku 4 (triage summaries)'],Evals:['Runbook execution dry-runs','Latency p95 budgets'],Guardrails:['Read-only by default','Two-person rule for remediation']},
+'Sales & lead intelligence':{Orchestration:['MCP host in CRM sidebar','Scheduled agent jobs'],MCP:['supabase/mcp (lead DB)','stripe/ai toolkit (billing signals)','slack-mcp-server (alerts)'],Models:['Gemini 2.5 Flash (enrichment at scale)','Claude Sonnet 4.5 (outreach drafting)'],Evals:['Lead-scoring precision tracking','Outreach quality LLM-judge'],Guardrails:['GDPR consent checks','Rate limits on outbound']},
+'Knowledge base / RAG':{Orchestration:['LlamaIndex workflows 2.0','Hybrid retriever (vector+BM25)'],MCP:['makenotion/notion-mcp-server (docs)','filesystem MCP (internal repos)','github/github-mcp-server (code docs)'],Models:['Claude Sonnet 4.5 (answers)','voyage-3 embeddings'],Evals:['Golden set via zion-eval-generator','Recall@k + faithfulness in CI'],Guardrails:['Citation-required answers','Per-document ACLs']}};
+const chips=document.getElementById('chips'),out=document.getElementById('out');let cur=null;
+chips.innerHTML=Object.keys(U).map(k=>`<button class="chip" data-k="${k}">${k}</button>`).join('');
+function show(k){cur=k;[...chips.children].forEach(b=>b.classList.toggle('on',b.dataset.k===k));
+const s=U[k];out.innerHTML=`<div class="stack on"><h2 style="margin-top:0">${k}</h2>`+Object.entries(s).map(([l,items])=>`<div class="layer"><b>${l}</b><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`).join('')+'</div>';}
+chips.addEventListener('click',e=>{if(e.target.dataset.k)show(e.target.dataset.k);});
+show(Object.keys(U)[0]);
+</script>
+</body>
+</html>
